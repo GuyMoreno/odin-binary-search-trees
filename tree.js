@@ -3,23 +3,18 @@
 export class Tree {
   constructor(array) {
     this.root = this.buildTree(array);
+    this.root = this.buildTree(processedArr); // Pass the processed array to buildTree
+  }
+
+  cleanedArray(array) {
+    // 1. Remove duplicates using a Set
+    const cleanedArray = [...new Set(array)];
+    // 2. Sort the array
+    cleanedArray.sort((a, b) => a - b);
+    return cleanedArray;
   }
 
   buildTree(array) {
-    const sortedUnique = [...new Set(array)].sort((a, b) => a - b);
-
-    function buildSubTree(arr, left, right) {
-      if (left > right) return null;
-
-      const mid = Math.floor((left + right) / 2);
-      const node = new Node(arr[mid]);
-
-      node.left = buildSubTree(arr, left, mid - 1);
-      node.right = buildSubTree(arr, mid + 1, right);
-
-      return node;
-    }
-
-    return buildSubTree(sortedUnique, 0, sortedUnique.length - 1);
+    return null; // Placeholder for tree building logic
   }
 }
