@@ -11,4 +11,6 @@ console.log(tree.root); // Should print the root node of the tree
 tree.insert(8);
 console.log(tree.root.right.right); // Should print the node with value 8
 
+tree.deleteItem(6);
+
 tree.prettyPrint(); // Should print the tree structure in a readable format
