@@ -122,4 +122,93 @@ export class Tree {
       this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
   };
+
+  find(value, node = this.root) {
+    // Step 1: Base Case - Node not found or reached end of tree
+    if (node === null) {
+      return null;
+    }
+
+    // Step 2: Base Case - Node found!
+    if (value === node.data) {
+      return node; // Return the actual Node object
+    }
+
+    // Step 3: Traverse Left or Right
+    if (value < node.data) {
+      // If value is smaller, go left
+      return this.find(value, node.left); // Return the result of the recursive call
+    } else {
+      // value > node.data
+      // If value is larger, go right
+      return this.find(value, node.right); // Return the result of the recursive call
+    }
+  }
+
+  levelOrderForEach(callback) {
+    // Check if a callback is provided
+    if (typeof callback !== "function") {
+      throw new Error(
+        "levelOrderForEach requires a callback function as an argument."
+      );
+    }
+
+    // Handle an empty tree
+    if (this.root === null) {
+      return; // Nothing to traverse
+    }
+
+    // Initialize the queue
+    // Use a standard JavaScript array as a queue.
+    // Add the root node to the queue to start the traversal.
+    const queue = [this.root];
+
+    // Step 4: Loop while the queue is not empty
+    while (queue.length > 0) {
+      // Step 4a: Dequeue the front node
+      // Array.prototype.shift() removes the first element and returns it.
+      const currentNode = queue.shift();
+
+      // Step 4b: Process the current node
+      // Call the provided callback function, passing the current node.
+      callback(currentNode);
+
+      // Step 4c: Enqueue children (if they exist)
+      // Add left child first (to maintain level-order from left to right)
+      if (currentNode.left !== null) {
+        queue.push(currentNode.left);
+      }
+      // Add right child next
+      if (currentNode.right !== null) {
+        queue.push(currentNode.right);
+      }
+    }
+  }
+
+  inOrderForEach(callback, node = this.root) {
+    // 1. Safety Check: Ensure a callback function is provided.
+    if (typeof callback !== "function") {
+      throw new Error(
+        "inOrderForEach requires a callback function as an argument."
+      );
+    }
+
+    // 2. Base Case for Recursion: If the current node is null, stop.
+    if (node === null) {
+      return;
+    }
+
+    // 3. Go Left: Recursively process the left subtree.
+    //    This call will run completely until it hits a null node,
+    //    then it will return to this point.
+    this.inOrderForEach(callback, node.left);
+
+    // 4. Process the Current Node: Once the left subtree is fully processed,
+    //    execute the callback on the current node.
+    callback(node);
+
+    // 5. Go Right: Recursively process the right subtree.
+    //    This call will run completely, and then the current function call ends.
+    this.inOrderForEach(callback, node.right);
+  }
 }

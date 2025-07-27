@@ -6,11 +6,15 @@ import { Tree } from "./tree.js";
 
 const testArray = [7, 3, 1, 4, 6, 2, 5];
 const tree = new Tree(testArray);
-console.log(tree.root); // Should print the root node of the tree
 
-tree.insert(8);
-console.log(tree.root.right.right); // Should print the node with value 8
+tree.prettyPrint();
 
-tree.deleteItem(6);
+console.log(tree.find(2)); // Should return the node with data 4
 
-tree.prettyPrint(); // Should print the tree structure in a readable format
+// tree.levelOrderForEach((node) => {
+//   console.log(node.data + " is a node in the tree.");
+// });
+
+tree.inOrderForEach((node) => {
+  console.log(node.data + " is a node in the tree.");
+});
