@@ -15,6 +15,6 @@ console.log(tree.find(2)); // Should return the node with data 4
 //   console.log(node.data + " is a node in the tree.");
 // });
 
-tree.preOrderForEach((node) => {
-  console.log(node.data + " is a node in PreOrder");
+tree.postOrderForEach((node) => {
+  console.log(node.data + " is a node in postOrder");
 });

@@ -239,4 +239,52 @@ export class Tree {
     // When all steps are done, this mini-program for 'node' is finished.
     // It automatically 'returns' to whoever called it, just like Step 2.
   }
+
+  postOrderForEach(callback, node = this.root) {
+    // 1. Safety Check
+    if (typeof callback !== "function") {
+      throw new Error(
+        "postOrderForEach requires a callback function as an argument."
+      );
+    }
+
+    // 2. Base Case for Recursion
+    if (node === null) {
+      return;
+    }
+
+    // 3. Go Left: Recursively process the left subtree.
+    this.postOrderForEach(callback, node.left);
+
+    // 4. Go Right: Recursively process the right subtree.
+    this.postOrderForEach(callback, node.right);
+
+    // 5. Process the Current Node (Root): This happens LAST!
+    //    Only after both the left and right subtrees have been fully processed.
+    callback(node); // <-- This is the final action for this node!
+  }
+
+  height(value) {
+    // 1. Find the node with the given value.
+    const startNode = this.find(value);
+
+    // 2. Handle the case where the value is not found in the tree.
+    if (startNode === null) {
+      return null; // As per assignment: "If the value is not found in the tree, the function should return null."
+    }
+
+    // 3. If the node is found, call our private recursive helper
+    //    to calculate its height.
+    return this.#calculateNodeHeight(startNode);
+  }
+
+  // Remember to place the #calculateNodeHeight helper method above or below this one in your class:
+  #calculateNodeHeight(node) {
+    if (node === null) {
+      return -1;
+    }
+    const leftHeight = this.#calculateNodeHeight(node.left);
+    const rightHeight = this.#calculateNodeHeight(node.right);
+    return 1 + Math.max(leftHeight, rightHeight);
+  }
 }
