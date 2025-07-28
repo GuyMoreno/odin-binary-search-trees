@@ -211,4 +211,32 @@ export class Tree {
     //    This call will run completely, and then the current function call ends.
     this.inOrderForEach(callback, node.right);
   }
+
+  preOrderForEach(callback, node = this.root) {
+    // Step 1: Safety Check (not relevant to flow, but always first)
+    if (typeof callback !== "function") {
+      throw new Error(
+        "preOrderForEach requires a callback function as an argument."
+      );
+    }
+
+    // Step 2: Base Case (the 'stop' instruction)
+
+    if (node === null) {
+      return; // This mini-program for 'null' node is done. Go back to whoever called me.
+    }
+
+    // Step 3: Do something with ME (the current node)
+    callback(node);
+
+    // Step 4: COMPLETELY process my LEFT child's recipe
+    this.preOrderForEach(callback, node.left); // Call another mini-program
+
+    // Step 5: COMPLETELY process my RIGHT child's recipe
+    this.preOrderForEach(callback, node.right); // Call another mini-program
+
+    // (End of this mini-program's recipe)
+    // When all steps are done, this mini-program for 'node' is finished.
+    // It automatically 'returns' to whoever called it, just like Step 2.
+  }
 }
