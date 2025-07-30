@@ -287,4 +287,31 @@ export class Tree {
     const rightHeight = this.#calculateNodeHeight(node.right);
     return 1 + Math.max(leftHeight, rightHeight);
   }
+
+  depth(value) {
+    // 1. Start at the root and initialize depth count to 0.
+    let currentNode = this.root;
+    let depth = 0;
+
+    // 2. Loop until we find the value or fall off the tree.
+    while (currentNode !== null) {
+      // 3. If we find the value, return the current depth.
+      if (value === currentNode.data) {
+        return depth;
+      }
+
+      // 4. If the value is not found, decide where to go next.
+      if (value < currentNode.data) {
+        currentNode = currentNode.left; // Go left
+      } else {
+        currentNode = currentNode.right; // Go right
+      }
+
+      // 5. Increment depth for each level we descend.
+      depth++;
+    }
+
+    // 6. If the loop finishes, the value was not found.
+    return null;
+  }
 }
