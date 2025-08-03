@@ -7,7 +7,9 @@ export class Tree {
   }
 
   cleanedArray(array) {
+    // Remove duplicates
     const cleanedArray = [...new Set(array)];
+    // Sort the array
     cleanedArray.sort((a, b) => a - b);
     return cleanedArray;
   }
@@ -18,21 +20,19 @@ export class Tree {
     if (start > end) {
       return null;
     }
+
+    //          mid
     //  0  1  2  3  4  5  6
     // [1, 2, 3, 4, 5, 6, 7]
 
     const mid = Math.floor((start + end) / 2);
-
+    // Create a new node with the middle element
     const node = new Node(array[mid]);
-
     node.left = this.buildTree(array, start, mid - 1);
-
     node.right = this.buildTree(array, mid + 1, end);
-
     return node;
   }
 
-  // --- NEW INSERT METHOD ---
   insert(value, node = this.root) {
     if (node === null) {
       return new Node(value); // Found the spot, create and return new node
@@ -54,47 +54,39 @@ export class Tree {
   // --- END NEW INSERT METHOD ---
 
   deleteItem(value, node = this.root) {
-    // Step 1: Base Case - If the tree is empty or value not found
     if (node === null) {
-      return null; // Value not found, or empty subtree
+      return null;
     }
 
-    // Step 2: Traverse to find the node to delete
     if (value < node.data) {
-      // If value is smaller, go left
       node.left = this.deleteItem(value, node.left);
-      return node; // Return current node (with potentially updated left child)
+      return node; 
     } else if (value > node.data) {
-      // If value is larger, go right
       node.right = this.deleteItem(value, node.right);
-      return node; // Return current node (with potentially updated right child)
+      return node; 
     } else {
-      // Step 3: Node with the 'value' is found (value === node.data)
 
-      // Case 1: Node has no children (Leaf Node) OR Node has one child
       if (node.left === null) {
-        // If no left child, return the right child (which could be null)
+
         return node.right;
       } else if (node.right === null) {
-        // If no right child, return the left child
+
         return node.left;
       }
 
-      // Case 2: Node has two children
-      // Find the in-order successor (smallest node in the right subtree)
-      node.data = this.#findMin(node.right); // Replace current node's data with successor's data
-      // Delete the in-order successor from the right subtree
+      node.data = this.#findMin(node.right); 
+      
       node.right = this.deleteItem(node.data, node.right);
-      return node; // Return the current node (with new data and updated right child)
+      return node; 
     }
   }
 
   #findMin(node) {
-    // Traverse left until the leftmost node is found
+
     while (node.left !== null) {
       node = node.left;
     }
-    return node.data; // Return the data of the smallest node
+    return node.data;
   }
 
   prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
@@ -313,5 +305,31 @@ export class Tree {
 
     // 6. If the loop finishes, the value was not found.
     return null;
+  }
+
+  isBalanced(node = this.root) {
+    // Base Case: A null node is considered balanced.
+    if (node === null) {
+      return true;
+    }
+
+    // 1. Get the height of the left and right subtrees
+    //    We can reuse the helper from our `height(value)` function!
+    const leftHeight = this.#calculateNodeHeight(node.left);
+    const rightHeight = this.#calculateNodeHeight(node.right);
+
+    // 2. Check if the current node is balanced
+    if (Math.abs(leftHeight - rightHeight) > 1) {
+      return false; // Found an unbalanced node!
+    }
+
+    // 3. If this node is okay, recursively check that BOTH children are also balanced
+    return this.isBalanced(node.left) && this.isBalanced(node.right);
+  }
+
+  rebalance() {
+    const values = [];
+    this.inOrderForEach((node) => values.push(node.data));
+    this.root = this.buildTree(values); // בונה מחדש עץ מאוזן
   }
 }
