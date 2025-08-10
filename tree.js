@@ -7,9 +7,7 @@ export class Tree {
   }
 
   cleanedArray(array) {
-    // Remove duplicates
     const cleanedArray = [...new Set(array)];
-    // Sort the array
     cleanedArray.sort((a, b) => a - b);
     return cleanedArray;
   }
@@ -21,9 +19,21 @@ export class Tree {
       return null;
     }
 
+    //            4
+    //          /   \
+    //        2     6
+    //      / \   / \
+    //    1   3   5   7
     //          mid
     //  0  1  2  3  4  5  6
     // [1, 2, 3, 4, 5, 6, 7]
+    // [1, 2, 3]
+    // [1]
+    //  ............  4  5  6
+
+    //              [ 5, 6, 7]
+    //              [ 5 ]
+    //                      [ 7 ]
 
     const mid = Math.floor((start + end) / 2);
     // Create a new node with the middle element
@@ -60,29 +70,25 @@ export class Tree {
 
     if (value < node.data) {
       node.left = this.deleteItem(value, node.left);
-      return node; 
+      return node;
     } else if (value > node.data) {
       node.right = this.deleteItem(value, node.right);
-      return node; 
+      return node;
     } else {
-
       if (node.left === null) {
-
         return node.right;
       } else if (node.right === null) {
-
         return node.left;
       }
 
-      node.data = this.#findMin(node.right); 
-      
+      node.data = this.#findMin(node.right);
+
       node.right = this.deleteItem(node.data, node.right);
-      return node; 
+      return node;
     }
   }
 
   #findMin(node) {
-
     while (node.left !== null) {
       node = node.left;
     }
